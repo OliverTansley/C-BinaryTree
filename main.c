@@ -115,6 +115,7 @@ struct Tree *addAll(struct Tree *toAdd, struct Tree *newTree)
  */
 struct Tree *removeNode(int toRemove, struct Tree *tree)
 {
+    tree->length--;
     if (tree->data == toRemove)
     {
         if (tree->left == NULL && tree->right == NULL)
@@ -146,7 +147,6 @@ struct Tree *removeNode(int toRemove, struct Tree *tree)
             tree->right = removeNode(toRemove, tree->right);
         }
     }
-    tree->length--;
 }
 
 int main()
