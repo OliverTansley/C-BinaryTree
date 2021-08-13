@@ -8,12 +8,6 @@
  * finished: TBD
  */
 
-//helper function returns length of an array of int's
-int length(int *arr)
-{
-    return sizeof(arr) / sizeof(int);
-}
-
 /**
  * Tree struct is recursively defined, the left and right 
  * subtrees are pointers to other tree structs that all 
@@ -22,10 +16,30 @@ int length(int *arr)
 struct Tree
 {
     int data;
-    int length;
+    int size;
     struct Tree *left;
     struct Tree *right;
 };
+
+void traversal(struct Tree *tree, FILE *f)
+{
+    if (tree->left != NULL)
+    {
+        traversal(tree->left, f);
+    }
+    fprintf(f, "%d", tree->data);
+    if (tree->right != NULL)
+    {
+        traversal(tree->right, f);
+    }
+}
+
+void writeTree(struct Tree *tree)
+{
+    FILE *f = fopen("tree.txt", "w");
+    traversal(tree, f);
+    fclose(f);
+}
 
 /**
  * @brief Tree Contstructor.
@@ -39,7 +53,7 @@ struct Tree *Tree(int data)
     T->data = data;
     T->left = NULL;
     T->right = NULL;
-    T->length = 1;
+    T->size = 1;
     return T;
 }
 
@@ -80,7 +94,7 @@ struct Tree *addNode(int newData, struct Tree *tree)
             }
         }
     }
-    tree->length++;
+    tree->size++;
     return tree;
 }
 
@@ -115,7 +129,7 @@ struct Tree *addAll(struct Tree *toAdd, struct Tree *newTree)
  */
 struct Tree *removeNode(int toRemove, struct Tree *tree)
 {
-    tree->length--;
+    tree->size--;
     if (tree->data == toRemove)
     {
         if (tree->left == NULL && tree->right == NULL)
@@ -133,7 +147,7 @@ struct Tree *removeNode(int toRemove, struct Tree *tree)
         else
         {
             tree->right = addAll(tree->left, tree->right);
-            return removeNode(toRemove, tree);
+            return tree->right;
         }
     }
     else
@@ -141,10 +155,12 @@ struct Tree *removeNode(int toRemove, struct Tree *tree)
         if (toRemove < tree->data)
         {
             tree->left = removeNode(toRemove, tree->left);
+            return tree;
         }
         else
         {
             tree->right = removeNode(toRemove, tree->right);
+            return tree;
         }
     }
 }
@@ -153,14 +169,15 @@ int main()
 {
     struct Tree *t;
     t = Tree(3);
-    t = addNode(5, t);
-    t = addNode(4, t);
+    addNode(5, t);
+    addNode(4, t);
+    addNode(9, t);
+    addNode(1, t);
+    addNode(2, t);
+    addNode(18, t);
+    addNode(24, t);
 
-    printf("%d %d %d", t->data, t->right->data, t->right->left->data);
-
-    t = removeNode(5, t);
-
-    printf("\n");
-
-    printf("%d %d ", t->data, t->right->data);
+    removeNode(18, t);
+    removeNode(24, t);
+    removeNode(5, t);
 }
