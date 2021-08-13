@@ -251,4 +251,15 @@ struct Tree *removeNode(int toRemove, struct Tree *tree)
 
 int main()
 {
+    struct Tree *p;
+    p = Tree(6);
+    addNode(4, p);
+    addNode(2, p);
+    addNode(3, p);
+    addNode(1, p);
+    addNode(9, p);
+    addNode(7, p);
+    addNode(5, p);
+    addNode(18, p);
+    display(p);
 }
